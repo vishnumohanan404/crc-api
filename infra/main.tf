@@ -25,7 +25,7 @@ resource "aws_vpc" "vpc" {
   enable_dns_support = true
 
   tags = {
-    Name = "My-VPC"
+    Name = "crc-vpc"
   }
 }
 
@@ -45,3 +45,13 @@ resource "aws_subnet" "private_subnet" {
   }
 }
 
+
+resource "aws_dynamodb_table" "crc_table" {
+  billing_mode = "PAY_PER_REQUEST"
+  name         = "crc_view_count_table"
+  hash_key = "count"
+  attribute {
+    name = "count"
+    type = "S"
+  }
+}
