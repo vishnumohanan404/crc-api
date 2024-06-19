@@ -2,7 +2,7 @@
 terraform {
   backend "s3" {
     bucket = "vishnuverse.xyz"
-    key    = "terraform.tfstate"
+    key    = "api-terraform/terraform.tfstate"
     region = "ap-south-1" # Replace with your desired region
   }
 }
