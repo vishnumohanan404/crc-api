@@ -2,6 +2,12 @@
 resource "aws_apigatewayv2_api" "visit_api" {
   name          = "visitors"
   protocol_type = "HTTP"
+  cors_configuration {
+    allow_origins = ["https://www.vishnuverse.xyz", "http://localhost:5173/"]
+    allow_methods = ["PUT", "GET", "OPTIONS"]
+    allow_headers = ["Content-Type"]
+    max_age = 300
+  }
 }
 
 # API Gateway
