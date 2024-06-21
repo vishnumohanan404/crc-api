@@ -28,7 +28,10 @@ export const updateVisitorsHandler = async (event) => {
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ message: `Count incremented to: ${count}` }),
+      body: JSON.stringify({
+        message: `Count incremented to: ${count}`,
+        count,
+      }),
     };
   } catch (error) {
     console.error("Error updating DynamoDB:", error);
