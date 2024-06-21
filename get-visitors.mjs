@@ -1,4 +1,4 @@
-import { DynamoDBClient, ScanCommand } from "@aws-sdk/client-dynamodb";
+import { DynamoDBClient, GetItemCommand } from "@aws-sdk/client-dynamodb";
 
 const client = new DynamoDBClient({});
 
@@ -7,21 +7,32 @@ const TABLE_NAME = "crc_view_count_table";
 
 export const getVisitorsHandler = async (event) => {
   try {
-    // Define the parameters for the scan operation
+    // Define the parameters for the Get operation
     const params = {
       TableName: TABLE_NAME,
+      Key: {
+        id: { N: "1" }, // Key with number value as a string
+      },
     };
-    
 
     // Perform the scan operation
-    const command = new ScanCommand(params);
-    // const data = await dynamoDB.scan(params).promise();
+    const command = new GetItemCommand(params);
     const data = await client.send(command);
-    // Create the response
-    const response = {
-      statusCode: 200,
-      body: JSON.stringify(data.Items),
-    };
+
+    // Check if item exists before creating response
+    if ("Item" in data) {
+      const response = {
+        statusCode: 200,
+        body: JSON.stringify(data.Item),
+      };
+      return response;
+    } else {
+      const response = {
+        statusCode: 404, // Not Found
+        body: JSON.stringify({ message: "Item not found" }),
+      };
+      return response;
+    }
     return response;
   } catch (error) {
     console.error("Error reading from DynamoDB", error);
