@@ -25,14 +25,29 @@ export const updateVisitorsHandler = async (event) => {
       new UpdateItemCommand(updateParams)
     );
     const count = updateResponse.Attributes.count.N;
-
-    return {
+    // access control
+    let allowed = false;
+    const origin = event.headers?.origin?.toLowerCase();
+    const allowedOrigins = [
+      "https://www.vishnuverse.xyz",
+      "https://vishnuverse.xyz",
+      "http://localhost:5173",
+    ];
+    allowed = allowedOrigins.some(
+      (allowedOrigin) => origin === allowedOrigin.toLowerCase()
+    );
+    const response = {
       statusCode: 200,
       body: JSON.stringify({
         message: `Count incremented to: ${count}`,
         count,
       }),
+      headers: {
+        "Access-Control-Allow-Origin": allowed ? origin : "none", // Required for CORS support to work
+        "Access-Control-Allow-Methods": "PUT, OPTIONS",
+      },
     };
+    return response;
   } catch (error) {
     console.error("Error updating DynamoDB:", error);
     return {
