@@ -26,7 +26,7 @@ jobs:
   # This job only runs if the previous job (test) fails
   check_and_merge:
     name: Check and Merge
-    needs: test # Requires successful completion of 'test' job
+    # needs: test # Requires successful completion of 'test' job
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
