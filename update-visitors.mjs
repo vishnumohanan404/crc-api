@@ -4,7 +4,7 @@ const client = new DynamoDBClient({});
 
 const TABLE_NAME = "crc_view_count_table";
 
-export const updateVisitorsHandler = async (event) => {
+const updateVisitorsHandler = async (event) => {
   try {
     const updateParams = {
       TableName: TABLE_NAME,
@@ -50,10 +50,11 @@ export const updateVisitorsHandler = async (event) => {
     };
     return response;
   } catch (error) {
-    console.error("Error updating DynamoDB:", error);
+    console.error("Error updating DynamoDB: ", error);
     return {
       statusCode: 500,
       body: JSON.stringify({ message: "Error incrementing count" }),
     };
   }
 };
+export { updateVisitorsHandler };
