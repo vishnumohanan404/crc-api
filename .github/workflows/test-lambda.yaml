@@ -23,30 +23,4 @@ jobs:
       - name: Run Jest Tests
         run: npm test
         id: run_test
-  # This job only runs if the previous job (test) fails
-  check_and_merge:
-    name: Check and Merge
-    # needs: test # Requires successful completion of 'test' job
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Check for failing tests
-        run: |
-          if [[ ${{ needs.test.result == 'failure' }} ]]; then
-            echo "${{ needs.test.result }}"
-            echo "Tests are failing. Merge is blocked."
-            exit 1
-          fi
-
-      - name: Allow merge
-        uses: actions/github-script@v6
-        with:
-          script: |
-            github.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: "Tests passed. Pull Request can be merged."
-            })
+  
