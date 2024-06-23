@@ -22,20 +22,21 @@ jobs:
 
       - name: Run Jest Tests
         run: npm test
+        id: run_test
   # This job only runs if the previous job (test) fails
   check_and_merge:
     name: Check and Merge
     needs: test # Requires successful completion of 'test' job
     runs-on: ubuntu-latest
-    if: ${{ failure() == false }} 
+    if: ${{ failure() == false }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
       - name: Check for failing tests
         run: |
-          if [[ ${{ steps.test.conclusion == 'failure' }} ]]; then
-            echo "${{ steps.test.conclusion }}"
+          if [[ ${{ job.test.conclusion == 'failure' }} ]]; then
+            echo "${{ job.test.conclusion }}"
             echo "Tests are failing. Merge is blocked."
             exit 1
           fi
