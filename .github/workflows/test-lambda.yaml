@@ -35,6 +35,7 @@ jobs:
       - name: Check for failing tests
         run: |
           if [[ ${{ steps.test.conclusion == 'failure' }} ]]; then
+            echo "${{ steps.test.conclusion == 'failure' }}"
             echo "Tests are failing. Merge is blocked."
             exit 1
           fi
