@@ -12,7 +12,7 @@ describe('updateVisitorsHandler', () => {
   it('should increment the count and return the correct response', async () => {
     // Mock the UpdateItemCommand response
     ddbMock.on(UpdateItemCommand).resolves({
-      Attributes: { count: { N: '2' } },
+      Attributes: { count: { N: '4' } },
     });
 
     const event = {
