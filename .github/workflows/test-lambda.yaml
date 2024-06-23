@@ -27,7 +27,7 @@ jobs:
     name: Check and Merge
     needs: test # Requires successful completion of 'test' job
     runs-on: ubuntu-latest
-    if: ${{ failure() == false }} # Only run if previous job succeeds
+    if: ${{ failure() == false }} 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
