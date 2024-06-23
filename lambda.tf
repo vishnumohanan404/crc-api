@@ -42,38 +42,18 @@ resource "aws_iam_role_policy_attachment" "attach_iam_policy_to_iam_role" {
   policy_arn = aws_iam_policy.iam_policy_for_lambda.arn
 }
 
-# create zip folder for get-visitors lambda func
-data "archive_file" "lambda_get" {
-  type        = "zip"
-  source_file = "get-visitors.mjs"
-  output_path = "get-visitors-payload.zip"
-}
-
-# create get count lambda func
-resource "aws_lambda_function" "get_count_lambda" {
-  # If the file is not in the current working directory you will need to include a
-  # path.module in the filename.
-  filename         = "get-visitors-payload.zip"
-  function_name    = "get-visitors"
-  role             = aws_iam_role.lambda_execution_role.arn
-  source_code_hash = data.archive_file.lambda_get.output_base64sha256
-  runtime          = "nodejs20.x"
-  handler          = "get-visitors.getVisitorsHandler"
-  depends_on       = [aws_iam_role_policy_attachment.attach_iam_policy_to_iam_role]
-}
-
 # create zip folder for update-visitors lambda func
 data "archive_file" "lambda_update" {
   type        = "zip"
   source_file = "update-visitors.mjs"
-  output_path = "update-visitors-payload.zip"
+  output_path = "update-visitors.zip"
 }
 
 # create update count lambda func
 resource "aws_lambda_function" "update_count_lambda" {
   # If the file is not in the current working directory you will need to include a
   # path.module in the filename.
-  filename         = "update-visitors-payload.zip"
+  filename         = "update-visitors.zip"
   function_name    = "update-visitors"
   role             = aws_iam_role.lambda_execution_role.arn
   source_code_hash = data.archive_file.lambda_update.output_base64sha256
@@ -83,17 +63,40 @@ resource "aws_lambda_function" "update_count_lambda" {
 }
 
 #resource based policy for lambda - for giving apigateway access to invoke the lambda
-resource "aws_lambda_permission" "apigw_invoke_get" {
-  statement_id  = "AllowAPIGatewayInvoke"
-  action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.get_count_lambda.function_name
-  principal     = "apigateway.amazonaws.com"
-  source_arn    = "${aws_apigatewayv2_api.visit_api.execution_arn}/*/*"
-}
 resource "aws_lambda_permission" "apigw_invoke_update" {
   statement_id  = "AllowAPIGatewayInvoke"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.update_count_lambda.function_name
+  principal     = "apigateway.amazonaws.com"
+  source_arn    = "${aws_apigatewayv2_api.visit_api.execution_arn}/*/*"
+}
+
+# mock integration for preflight request
+# create zip folder for update-visitors-preflight lambda func
+data "archive_file" "lambda_update_mock" {
+  type        = "zip"
+  source_file = "update-visitors-preflight-mock.mjs"
+  output_path = "update-visitors-mock.zip"
+}
+
+# create update count preflight lambda func
+resource "aws_lambda_function" "update_count_lambda_mock" {
+  # If the file is not in the current working directory you will need to include a
+  # path.module in the filename.
+  filename         = "update-visitors-mock.zip"
+  function_name    = "update-visitors-preflight-mock"
+  role             = aws_iam_role.lambda_execution_role.arn
+  source_code_hash = data.archive_file.lambda_update_mock.output_base64sha256
+  runtime          = "nodejs20.x"
+  handler          = "update-visitors-preflight-mock.handler"
+  depends_on       = [aws_iam_role_policy_attachment.attach_iam_policy_to_iam_role]
+}
+
+#resource based policy for lambda - for giving apigateway access to invoke the lambda
+resource "aws_lambda_permission" "apigw_invoke_update_mock" {
+  statement_id  = "AllowAPIGatewayInvoke"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.update_count_lambda_mock.function_name
   principal     = "apigateway.amazonaws.com"
   source_arn    = "${aws_apigatewayv2_api.visit_api.execution_arn}/*/*"
 }

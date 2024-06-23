@@ -1,8 +1,4 @@
-import {
-  DynamoDBClient,
-  UpdateItemCommand,
-  GetItemCommand,
-} from "@aws-sdk/client-dynamodb";
+import { DynamoDBClient, UpdateItemCommand } from "@aws-sdk/client-dynamodb";
 
 const client = new DynamoDBClient({});
 
@@ -24,24 +20,15 @@ export const updateVisitorsHandler = async (event) => {
       },
       ReturnValues: "UPDATED_NEW",
     };
-    const command = new GetItemCommand({
-      TableName: TABLE_NAME,
-      Key: {
-        id: { N: "1" }, // Key with number value as a string
-      },
-    });
-    const data = await client.send(command);
-    let count = data?.Item.count.N;
-    if (event.httpMethod === "PUT") {
-      const updateResponse = await client.send(
-        new UpdateItemCommand(updateParams)
-      );
-      count = updateResponse.Attributes.count.N;
-    }
+
+    const updateResponse = await client.send(
+      new UpdateItemCommand(updateParams)
+    );
+    const count = updateResponse.Attributes.count.N;
+
     // access control
     let allowed = false;
     const origin = event.headers?.origin?.toLowerCase();
-    console.log("event", event);
     const allowedOrigins = [
       "https://www.vishnuverse.xyz",
       "https://vishnuverse.xyz",
