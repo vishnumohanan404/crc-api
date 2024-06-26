@@ -2,6 +2,6 @@
 terraform {
   backend "s3" {
     key    = "api-terraform/terraform.tfstate"
-    region = "ap-south-1" # Replace with your desired region
+    region = "ap-south-1"
   }
 }
