@@ -42,7 +42,8 @@ The Cloud Resume Challenge can be broken down into several logical stages:
 1. ### CI/CD - Infrastructure Provisioning and Testing:
 
 - Tools: GitHub Actions, Terraform
-- Description: This stage utilizes GitHub Actions to automate the CI/CD pipeline. Terraform defines and manages the infrastructure resources on AWS, including provisioning and testing them before deployment.
+- Description: This stage utilizes GitHub Actions to automate the CI/CD pipeline. Terraform defines and manages the infrastructure resources on AWS, including provisioning and testing them before deployment. There is also branch protection rules applied to protect main branch from code which fails the tests.
+![Screenshots](assets/screenshot.png)
 
 2. ### Front-end Development and Deployment:
 
