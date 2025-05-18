@@ -30,8 +30,8 @@ const updateVisitorsHandler = async (event) => {
     let allowed = false;
     const origin = event.headers?.origin?.toLowerCase();
     const allowedOrigins = [
-      "https://www.vishnuverse.xyz",
-      "https://vishnuverse.xyz",
+      "https://www.vishnuvw.xyz",
+      "https://vishnuvw.xyz",
       "http://localhost:5173",
     ];
     allowed = allowedOrigins.some(

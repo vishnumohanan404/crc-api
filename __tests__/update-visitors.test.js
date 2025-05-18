@@ -17,7 +17,7 @@ describe('updateVisitorsHandler', () => {
 
     const event = {
       headers: {
-        origin: 'https://www.vishnuverse.xyz',
+        origin: 'https://www.vishnuvw.xyz',
       },
     };
 
@@ -30,7 +30,7 @@ describe('updateVisitorsHandler', () => {
         count: '2',
       }),
       headers: {
-        'Access-Control-Allow-Origin': 'https://www.vishnuverse.xyz',
+        'Access-Control-Allow-Origin': 'https://www.vishnuvw.xyz',
         'Access-Control-Allow-Methods': 'PUT',
       },
     });
@@ -53,7 +53,7 @@ describe('updateVisitorsHandler', () => {
 
     const event = {
       headers: {
-        origin: 'https://www.vishnuverse.xyz',
+        origin: 'https://www.vishnuvw.xyz',
       },
     };
 
